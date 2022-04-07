@@ -91,7 +91,8 @@ class DateAndTimePickerDialog extends StatelessWidget {
                 lastDate: DateTime(2101),
                 onDateChanged: (dt) async {
                   if (dt.isBefore(DateTime.now())) {
-                    _pd.selectedDate = DateTime.now();
+                    print('past Time');
+                    _pd.selectedDate = null;
                     _pd.reloadUi();
                     await Fluttertoast.showToast(
                       msg: "Please select a future date",
@@ -101,15 +102,9 @@ class DateAndTimePickerDialog extends StatelessWidget {
                       textColor: Colors.white,
                       fontSize: 13.0,
                     );
-                    _pd.selectedDate = DateTime.now();
-                    _pd.reloadUi();
                     return;
-                  } else if (_pd.checkWeekDayExists(dt)) {
-                    _pd.selectedDate = dt;
-                    _pd.reloadUi();
-                    return;
-                  } else {
-                    _pd.selectedDate = DateTime.now();
+                  } else if (!_pd.checkWeekDayExists(dt)) {
+                    _pd.selectedDate = null;
                     _pd.reloadUi();
                     await Fluttertoast.showToast(
                       msg: "Consultation is not available on this day",
@@ -119,7 +114,9 @@ class DateAndTimePickerDialog extends StatelessWidget {
                       textColor: Colors.white,
                       fontSize: 13.0,
                     );
-                    _pd.selectedDate = DateTime.now();
+                    return;
+                  } else {
+                    _pd.selectedDate = dt;
                     _pd.reloadUi();
                     return;
                   }
